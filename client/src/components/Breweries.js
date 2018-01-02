@@ -1,22 +1,26 @@
 import React from 'react'
 import axios from 'axios'
 import { Card, Image, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import InfiniteScroll from 'react-infinite-scroller'
 
 class Breweries extends React.Component {
-  state = { breweries: {} }
+  state = { breweries: [], hasMore: true }
 
-  componentDidMount() {
-    axios.get('/api/all_breweries')
+  loadMore = (page) => {
+    axios.get(`/api/all_breweries?page=${page}&per_page=12`)
       .then( res => {
-        this.setState({ breweries: res.data })
+        const data = res.data
+        const { breweries } = this.state
+        let hasMore = data.page === data.total_pages ? false : true
+        this.setState({ breweries: [...breweries, ...data.entries], hasMore })
       })
-      .catch( err => console.log(err))
+      .catch( err => console.log(err) )
   }
 
   displayBreweries = () => {
     const { breweries } = this.state
-    if (breweries.entries)
-      return breweries.entries.map( (b, i) => {
+    if (breweries)
+      return breweries.map( (b, i) => {
         const image = b.images ? b.images.square_medium : 'http://shashgrewal.com/wp-content/uploads/2015/05/default-placeholder-300x300.png'
         return (
           <Card>
@@ -33,32 +37,30 @@ class Breweries extends React.Component {
   }
 
   render() {
-    const { breweries } = this.state
-    if (breweries.entries)
-      return(
-        <Segment style={styles.beerList}>
-          <Card.Group>
+    return(
+      <Segment basic>
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={this.loadMore}
+          hasMore={this.state.hasMore}
+          loader={<div style={styles.loading}>Loading...</div>}
+          useWindow={true}
+          threshold={400}
+        >
+          <Card.Group itemsPerRow={4}>
             {this.displayBreweries()}
           </Card.Group>
-        </Segment>
-      )
-    else
-      return(
-        <Segment style={styles.beerList}>
-          <Dimmer active style={styles.loading}>
-            <Loader>Loading Breweries</Loader>
-          </Dimmer>
-        </Segment>
-      )
+        </InfiniteScroll>
+      </Segment>
+    )
   }
 }
 
 const styles = {
-  beerList: {
-    backgroundColor: 'white',
-  },
   loading: {
-    height: '80vh',
+    height: '40vh',
+    textAlign: 'center',
+    marginTop: '10vh',
   },
 }
 

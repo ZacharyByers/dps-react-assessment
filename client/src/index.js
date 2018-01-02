@@ -8,14 +8,6 @@ import store from './store';
 import 'semantic-ui-css/semantic.min.css';
 import { injectGlobal } from 'styled-components';
 
-injectGlobal`
-  html, body {
-    background-color: black;
-    width: 100%;
-    height: 100%;
-  }
-`
-
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>

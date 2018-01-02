@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import InfiniteScroll from 'react-infinite-scroller'
-import { Card, Image, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { Card, Image, Segment } from 'semantic-ui-react'
 
 class Beers extends React.Component {
   state = { beers: [], hasMore: true }
@@ -25,7 +25,7 @@ class Beers extends React.Component {
   }
 
   loadMore = (page) => {
-    axios.get(`/api/all_beers?page=${page}&per_page=10`)
+    axios.get(`/api/all_beers?page=${page}&per_page=12`)
       .then( res => {
         const data = res.data
         const { beers } = this.state
@@ -36,9 +36,8 @@ class Beers extends React.Component {
   }
 
   render() {
-    const { beers } = this.state
     return(
-      <Segment style={styles.beerList}>
+      <Segment basic textAlign='center'>
         <InfiniteScroll
           pageStart={0}
           loadMore={this.loadMore}
@@ -47,7 +46,7 @@ class Beers extends React.Component {
           useWindow={true}
           threshold={400}
         >
-          <Card.Group>
+          <Card.Group itemsPerRow={4}>
             {this.displayBeers()}
           </Card.Group>
         </InfiniteScroll>
@@ -57,9 +56,6 @@ class Beers extends React.Component {
 }
 
 const styles = {
-  beerList: {
-    backgroundColor: 'white',
-  },
   loading: {
     height: '80vh',
     textAlign: 'center',
