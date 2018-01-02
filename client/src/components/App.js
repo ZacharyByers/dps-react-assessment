@@ -1,30 +1,26 @@
-import React, { Component } from 'react';
-import NoMatch from './NoMatch';
-import NavBar from './NavBar';
-import Flash from './Flash';
-import Home from './Home';
-import { Switch, Route } from 'react-router-dom';
-import { Segment } from 'semantic-ui-react';
+import React from 'react'
+import NoMatch from './NoMatch'
+import NavBar from './NavBar'
+import Flash from './Flash'
+import Home from './Home'
+import Beers from './Beers'
+import { Switch, Route } from 'react-router-dom'
+import { Container } from 'semantic-ui-react'
 
-class App extends Component {
+class App extends React.Component {
   render() {
     return (
-      <Segment style={styles.background}>
+      <Container>
         <NavBar />
         <Flash />
         <Switch>
           <Route exact path='/' component={Home} />
+          <Route exact path='/beers' component={Beers} />
           <Route component={NoMatch} />
         </Switch>
-      </Segment>
-    );
+      </Container>
+    )
   }
 }
 
-const styles = {
-  background: {
-    backgroundColor: 'black',
-  },
-}
-
-export default App;
+export default App
