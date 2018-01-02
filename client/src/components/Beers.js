@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios'
-import { List, Dimmer, Loader, Segment } from 'semantic-ui-react'
+import { Card, Dimmer, Loader, Segment } from 'semantic-ui-react'
 
 class Beers extends React.Component {
   state = { beers: {} }
@@ -17,7 +17,15 @@ class Beers extends React.Component {
     const { beers } = this.state
     if (beers.entries)
       return beers.entries.map( (b, i) => {
-        return <List.Item key={i}>{b.name}</List.Item>
+        return (
+          <Card>
+            <Card.Content>
+              <Card.Header>{b.name_display}</Card.Header>
+              <Card.Meta>{b.style.short_name}</Card.Meta>
+              <Card.Description>{b.description}</Card.Description>
+            </Card.Content>
+          </Card>
+        )
       })
     return null
   }
@@ -27,9 +35,9 @@ class Beers extends React.Component {
     if (beers.entries)
       return(
         <Segment style={styles.beerList}>
-          <List divided>
+          <Card.Group>
             {this.displayBeers()}
-          </List>
+          </Card.Group>
         </Segment>
       )
     else
