@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import { Card, Image, Dimmer, Loader, Segment } from 'semantic-ui-react'
 import InfiniteScroll from 'react-infinite-scroller'
+import { Link } from 'react-router-dom'
 
 class Breweries extends React.Component {
   state = { breweries: [], hasMore: true }
@@ -21,14 +22,16 @@ class Breweries extends React.Component {
     const { breweries } = this.state
     if (breweries)
       return breweries.map( (b, i) => {
+        let name = b.name
+        if (name === '#FREEDOM Craft Brewery')
+          name = 'FREEDOM Craft Brewery'
         const image = b.images ? b.images.square_medium : 'http://shashgrewal.com/wp-content/uploads/2015/05/default-placeholder-300x300.png'
         return (
-          <Card>
+          <Card as={ Link } name='brewery' to={`/brewery/${name}`}>
             <Image src={image} />
             <Card.Content>
-              <Card.Header href={b.website}>{b.name_short_display}</Card.Header>
+              <Card.Header>{b.name_short_display}</Card.Header>
               {b.established && <Card.Meta>Est. {b.established}</Card.Meta>}
-              <Card.Description>{b.description || 'No Description Available'}</Card.Description>
             </Card.Content>
           </Card>
         )
@@ -47,7 +50,7 @@ class Breweries extends React.Component {
           useWindow={true}
           threshold={400}
         >
-          <Card.Group itemsPerRow={4}>
+          <Card.Group itemsPerRow={4} stackable>
             {this.displayBreweries()}
           </Card.Group>
         </InfiniteScroll>

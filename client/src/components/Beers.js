@@ -1,7 +1,9 @@
 import React from 'react'
 import axios from 'axios'
 import InfiniteScroll from 'react-infinite-scroller'
+import DisplayBeer from './DisplayBeer'
 import { Card, Image, Segment } from 'semantic-ui-react'
+import { Link } from 'react-router-dom'
 
 class Beers extends React.Component {
   state = { beers: [], hasMore: true }
@@ -11,7 +13,7 @@ class Beers extends React.Component {
     if (beers)
       return beers.map( (b, i) => {
         return (
-          <Card>
+          <Card as={Link} name='beer' to={`/beer/${b.name}`} href='#'>
             <Card.Content>
               {b.labels && <Image src={b.labels.medium} />}
               <Card.Header>{b.name_display}</Card.Header>
@@ -46,7 +48,7 @@ class Beers extends React.Component {
           useWindow={true}
           threshold={400}
         >
-          <Card.Group itemsPerRow={4}>
+          <Card.Group itemsPerRow={4} stackable>
             {this.displayBeers()}
           </Card.Group>
         </InfiniteScroll>
