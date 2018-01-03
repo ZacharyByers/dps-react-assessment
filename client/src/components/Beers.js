@@ -12,13 +12,19 @@ class Beers extends React.Component {
     const { beers } = this.state
     if (beers)
       return beers.map( (b, i) => {
+        const image = b.labels ? b.labels.medium : 'https://www.mollyscustomsilver.com/image/cache/data/generic-beer-can-full-color-300x300.png'
+        let name = b.name.split('')
+        if(name[0] === '#'){
+          name.shift()
+        }
+        name = name.join('')
+
         return (
-          <Card as={Link} name='beer' to={`/beer/${b.name}`} href='#'>
+          <Card as={Link} name='beer' to={`/beer/${name}`} href='#'>
             <Card.Content>
-              {b.labels && <Image src={b.labels.medium} />}
-              <Card.Header>{b.name_display}</Card.Header>
+              <Image src={image} />
+              <Card.Header>{b.name}</Card.Header>
               {b.style && <Card.Meta>{b.style.short_name}</Card.Meta>}
-              <Card.Description>{b.description}</Card.Description>
             </Card.Content>
           </Card>
         )

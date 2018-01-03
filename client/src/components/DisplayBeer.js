@@ -9,18 +9,24 @@ class DisplayBeer extends React.Component {
     const { name } = this.props.match.params
     axios.get(`/api/beer/${name}`)
       .then( res => this.setState({ beer: res.data.entries[0] }) )
-      .catch( err => console.log(err) )
+      .catch( err => this.setState({ error: 'yup' }) )
   }
 
   render() {
     const { beer } = this.state
-    return(
-      <Segment basic>
-        <Header textAlign='center' as='h2'>{beer.name}</Header>
-        {beer.labels && <Image centered src={beer.labels.medium} />}
-        <Segment textAlign='center'>{beer.description}</Segment>
-      </Segment>
-    )
+    if (!this.state.error)
+      return(
+        <Segment basic>
+          <Header textAlign='center' as='h2'>{beer.name}</Header>
+          {beer.style && <Segment basic size='mini' textAlign='center'>{beer.style.short_name}</Segment>}
+          {beer.labels && <Image centered src={beer.labels.medium} />}
+          {beer.description && <Segment textAlign='center'>{beer.description}</Segment>}
+        </Segment>
+      )
+    else
+      return(
+        <Segment>API Error, Beer not found.</Segment>
+      )
   }
 }
 
